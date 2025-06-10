@@ -86,7 +86,13 @@ is_big(X).
 
   <script src="https://unpkg.com/tau-prolog@0.3.1/modules/core.js"></script>
   <script>
-    const session = pl.create();
+    const carGifs = {
+      tesla: 'https://giphy.com/embed/S7jznj1TlqH9otxZux',
+      bmw: 'https://giphy.com/embed/MotorTrend-top-gear-motortrend-america-yEWNsqrj8K7acGcCeo',
+      mercedes: 'https://giphy.com/embed/J6VkFoc92mTEA',
+      toyota: 'https://giphy.com/embed/FoVBIIrLYR5Je',
+      audi: 'https://giphy.com/embed/l46CwlES1UnwgqsaQ'
+    };
 
     const knowledge = `
 car(bmw).
@@ -106,16 +112,6 @@ is_big(X) :- big(X).
 is_fast(X) :- fast(X).
 `;
 
-    session.consult(knowledge);
-
-    const carGifs = {
-      tesla: 'https://giphy.com/embed/S7jznj1TlqH9otxZux',
-      bmw: 'https://giphy.com/embed/MotorTrend-top-gear-motortrend-america-yEWNsqrj8K7acGcCeo',
-      mercedes: 'https://giphy.com/embed/J6VkFoc92mTEA',
-      toyota: 'https://giphy.com/embed/FoVBIIrLYR5Je',
-      audi: 'https://giphy.com/embed/l46CwlES1UnwgqsaQ'
-    };
-
     function runProlog() {
       const input = document.getElementById("prolog-input").value.trim();
       const resultDiv = document.getElementById("result");
@@ -124,33 +120,48 @@ is_fast(X) :- fast(X).
       resultDiv.innerHTML = "";
       carGifsDiv.innerHTML = "";
 
-      session.query(input);
+      // Създаваме нова Prolog сесия при всяко изпълнение
+      const session = pl.create();
 
-      let shownGif = false;
+      session.consult(knowledge, {
+        success: () => {
+          session.query(input, {
+            success: () => {
+              let shownGif = false;
 
-      session.answers(answer => {
-        if(answer === false) {
-          if(!shownGif) {
-            resultDiv.innerHTML = "<p>Няма резултати за тази заявка.</p>";
-          }
-          return;
-        }
+              session.answers(answer => {
+                if (answer === false) {
+                  if (!shownGif) {
+                    resultDiv.innerHTML = "<p>Няма резултати за тази заявка.</p>";
+                  }
+                  return;
+                }
 
-        const str = pl.format_answer(answer);
-        resultDiv.innerHTML += `<p>${str}</p>`;
+                const str = pl.format_answer(answer);
+                resultDiv.innerHTML += `<p>${str}</p>`;
 
-        if(!shownGif){
-          const match = str.match(/X = (\w+)/);
-          if(match){
-            const car = match[1];
-            if(carGifs.hasOwnProperty(car)){
-              carGifsDiv.innerHTML = `
-                <iframe src="${carGifs[car]}" width="300" height="300" class="car-gif" allowFullScreen></iframe>
-              `;
-              shownGif = true;
-              return false; // спираме с още отговори
+                if (!shownGif) {
+                  const match = str.match(/X = (\w+)/);
+                  if (match) {
+                    const car = match[1];
+                    if (carGifs.hasOwnProperty(car)) {
+                      carGifsDiv.innerHTML = `
+                        <iframe src="${carGifs[car]}" width="300" height="300" class="car-gif" allowFullScreen></iframe>
+                      `;
+                      shownGif = true;
+                      return false; // Спиране на търсенето след първото попадение
+                    }
+                  }
+                }
+              });
+            },
+            error: (err) => {
+              resultDiv.innerHTML = `<p style="color: red;">Грешна заявка: ${err}</p>`;
             }
-          }
+          });
+        },
+        error: (err) => {
+          resultDiv.innerHTML = `<p style="color: red;">Грешка при зареждане на знанията: ${err}</p>`;
         }
       });
     }

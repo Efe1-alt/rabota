@@ -16,6 +16,7 @@
       border-radius: 10px;
       text-align: center;
     }
+
     textarea {
       width: 90%;
       max-width: 600px;
@@ -28,6 +29,7 @@
       padding: 8px;
       resize: vertical;
     }
+
     button {
       margin-top: 15px;
       padding: 10px 25px;
@@ -39,9 +41,11 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+
     button:hover {
       background-color: #005f99;
     }
+
     #result {
       margin-top: 20px;
       font-size: 18px;
@@ -49,6 +53,7 @@
       font-weight: bold;
       color: #004a99;
     }
+
     .animal-container {
       margin-top: 30px;
       min-height: 160px;
@@ -59,7 +64,8 @@
       border-radius: 12px;
       box-shadow: 0 0 10px #a0c4ff;
     }
-    .animal-gif {
+
+    .car-gif {
       max-width: 180px;
       border-radius: 12px;
       box-shadow: 0 0 10px #005f99;
@@ -67,19 +73,16 @@
   </style>
 </head>
 <body>
-  <h1>Раабота</h1>
-
-
-
-
+  <h1>Работа</h1>
   <h1>Prolog животни с различни правила и GIF</h1>
 
   <textarea id="prolog-input">
 % Примери на заявки:
-is_mammal(X).
+is_electric(X).
 is_big(X).
-is_predator(X).
+is_fast(X).
   </textarea><br />
+
   <button onclick="runProlog()">Изпълни</button>
 
   <div id="result"></div>
@@ -89,23 +92,15 @@ is_predator(X).
   <script>
     const session = pl.create();
 
-    // Разширена база знания с животни и правила
     const knowledge = `
- 
 car(bmw).
 car(tesla).
 car(ford).
 
-% Електрически коли
 electric(tesla).
-
-% Големи коли
 big(ford).
-
-% Бързи коли
 fast(bmw).
 
-% Правила
 is_electric(X) :- electric(X).
 is_big(X) :- big(X).
 is_fast(X) :- fast(X).
@@ -113,14 +108,13 @@ is_fast(X) :- fast(X).
 
     session.consult(knowledge);
 
-    const animalAnimations = {
-     const carAnimations = {
-  bmw: '<img src="https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif" class="car-gif" alt="BMW анимация" />',
-  tesla: '<img src="https://media.giphy.com/media/3o7TKzB9fO62kX91WU/giphy.gif" class="car-gif" alt="Tesla анимация" />',
-  ford: '<img src="https://media.giphy.com/media/xUA7b3sWDV7V4CkV0c/giphy.gif" class="car-gif" alt="Ford анимация" />',
-  audi: '<img src="https://media.giphy.com/media/ZCSPT0ZQlM7UI8nDAZ/giphy.gif" class="car-gif" alt="Audi анимация" />',
-  mercedes: '<img src="https://media.giphy.com/media/eJ4j2VnYOZU8qJU3Py/giphy.gif" class="car-gif" alt="Mercedes анимация" />',
-  toyota: '<img src="https://media.giphy.com/media/3oEjHYdoUPhYNldv0Y/giphy.gif" class="car-gif" alt="Toyota анимация" />'
+    const carAnimations = {
+      bmw: '<img src="https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif" class="car-gif" alt="BMW анимация" />',
+      tesla: '<img src="https://media.giphy.com/media/3o7TKzB9fO62kX91WU/giphy.gif" class="car-gif" alt="Tesla анимация" />',
+      ford: '<img src="https://media.giphy.com/media/xUA7b3sWDV7V4CkV0c/giphy.gif" class="car-gif" alt="Ford анимация" />',
+      audi: '<img src="https://media.giphy.com/media/ZCSPT0ZQlM7UI8nDAZ/giphy.gif" class="car-gif" alt="Audi анимация" />',
+      mercedes: '<img src="https://media.giphy.com/media/eJ4j2VnYOZU8qJU3Py/giphy.gif" class="car-gif" alt="Mercedes анимация" />',
+      toyota: '<img src="https://media.giphy.com/media/3oEjHYdoUPhYNldv0Y/giphy.gif" class="car-gif" alt="Toyota анимация" />'
     };
 
     function runProlog() {
@@ -133,22 +127,24 @@ is_fast(X) :- fast(X).
 
       session.query(input);
       session.answers(answer => {
-        if(answer === false) {
+        if (answer === false) {
           resultDiv.innerHTML += `<p>Няма повече резултати.</p>`;
           return;
         }
+
         const str = pl.format_answer(answer);
         if (str === "false.") {
           resultDiv.innerHTML = "<p>Няма резултати за тази заявка.</p>";
           return;
         }
+
         resultDiv.innerHTML += `<p>${str}</p>`;
 
         const match = str.match(/X = (\w+)/);
         if (match) {
-          const animal = match[1];
-          if (animalAnimations[animal]) {
-            animDiv.innerHTML = animalAnimations[animal];
+          const car = match[1];
+          if (carAnimations[car]) {
+            animDiv.innerHTML = carAnimations[car];
           } else {
             animDiv.innerHTML = "<p>Няма GIF за това животно.</p>";
           }
@@ -156,6 +152,5 @@ is_fast(X) :- fast(X).
       });
     }
   </script>
-
 </body>
 </html>

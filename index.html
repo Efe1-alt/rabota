@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prolog животни с различни правила и GIF</title>
+  <title>Prolog коли с различни правила и ВИДЕО</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -63,18 +63,19 @@
       background: #d0e8ff;
       border-radius: 12px;
       box-shadow: 0 0 10px #a0c4ff;
+      padding: 10px;
     }
 
-    .car-gif {
-      max-width: 180px;
+    .car-video {
+      max-width: 100%;
+      max-height: 300px;
       border-radius: 12px;
       box-shadow: 0 0 10px #005f99;
     }
   </style>
 </head>
 <body>
-  <h1>Работа</h1>
-  <h1>Prolog животни с различни правила и GIF</h1>
+  <h1>Prolog коли с различни правила и ВИДЕО</h1>
 
   <textarea id="prolog-input">
 % Примери на заявки:
@@ -109,12 +110,9 @@ is_fast(X) :- fast(X).
     session.consult(knowledge);
 
     const carAnimations = {
-      bmw: '<img src="https://media.giphy.com/media/xT0xeJpnrWC4XWblEk/giphy.gif" class="car-gif" alt="BMW анимация" />',
-      tesla: '<img src="https://media.giphy.com/media/3o7TKzB9fO62kX91WU/giphy.gif" class="car-gif" alt="Tesla анимация" />',
-      ford: '<img src="https://media.giphy.com/media/xUA7b3sWDV7V4CkV0c/giphy.gif" class="car-gif" alt="Ford анимация" />',
-      audi: '<img src="https://media.giphy.com/media/ZCSPT0ZQlM7UI8nDAZ/giphy.gif" class="car-gif" alt="Audi анимация" />',
-      mercedes: '<img src="https://media.giphy.com/media/eJ4j2VnYOZU8qJU3Py/giphy.gif" class="car-gif" alt="Mercedes анимация" />',
-      toyota: '<img src="https://media.giphy.com/media/3oEjHYdoUPhYNldv0Y/giphy.gif" class="car-gif" alt="Toyota анимация" />'
+      bmw: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />Вашият браузър не поддържа видео.</video>',
+      tesla: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4" />Вашият браузър не поддържа видео.</video>',
+      ford: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />Вашият браузър не поддържа видео.</video>'
     };
 
     function runProlog() {
@@ -146,7 +144,7 @@ is_fast(X) :- fast(X).
           if (carAnimations[car]) {
             animDiv.innerHTML = carAnimations[car];
           } else {
-            animDiv.innerHTML = "<p>Няма GIF за това животно.</p>";
+            animDiv.innerHTML = "<p>Няма видео за този автомобил.</p>";
           }
         }
       });

@@ -16,6 +16,7 @@
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
       text-align: center;
     }
+
     textarea {
       width: 90%;
       height: 120px;
@@ -27,6 +28,7 @@
       padding: 10px;
       resize: vertical;
     }
+
     button {
       margin-top: 15px;
       padding: 10px 25px;
@@ -38,9 +40,11 @@
       cursor: pointer;
       transition: background-color 0.3s ease;
     }
+
     button:hover {
       background-color: #005f99;
     }
+
     #result {
       margin-top: 20px;
       font-size: 18px;
@@ -48,6 +52,7 @@
       font-weight: bold;
       color: #004a99;
     }
+
     .car-container {
       margin-top: 30px;
       min-height: 320px;
@@ -60,12 +65,12 @@
       border-radius: 12px;
       box-shadow: 0 0 10px #a0c4ff;
     }
+
     .car-gif {
       width: 300px;
-      height: 300px;
+      height: auto;
       border-radius: 12px;
       box-shadow: 0 0 10px #007acc;
-      border: none;
     }
   </style>
 </head>
@@ -86,14 +91,16 @@ is_big(X).
 
   <script src="https://unpkg.com/tau-prolog@0.3.1/modules/core.js"></script>
   <script>
+    // GIF-ове от GIPHY (.gif директни линкове)
     const carGifs = {
-      tesla: 'https://giphy.com/embed/S7jznj1TlqH9otxZux',
-      bmw: 'https://giphy.com/embed/MotorTrend-top-gear-motortrend-america-yEWNsqrj8K7acGcCeo',
-      mercedes: 'https://giphy.com/embed/J6VkFoc92mTEA',
-      toyota: 'https://giphy.com/embed/FoVBIIrLYR5Je',
-      audi: 'https://giphy.com/embed/l46CwlES1UnwgqsaQ'
+      tesla: 'https://media.giphy.com/media/S7jznj1TlqH9otxZux/giphy.gif',
+      bmw: 'https://media.giphy.com/media/yEWNsqrj8K7acGcCeo/giphy.gif',
+      mercedes: 'https://media.giphy.com/media/J6VkFoc92mTEA/giphy.gif',
+      toyota: 'https://media.giphy.com/media/FoVBIIrLYR5Je/giphy.gif',
+      audi: 'https://media.giphy.com/media/l46CwlES1UnwgqsaQ/giphy.gif'
     };
 
+    // Prolog факти
     const knowledge = `
 car(bmw).
 car(tesla).
@@ -120,7 +127,6 @@ is_fast(X) :- fast(X).
       resultDiv.innerHTML = "";
       carGifsDiv.innerHTML = "";
 
-      // Създаваме нова Prolog сесия при всяко изпълнение
       const session = pl.create();
 
       session.consult(knowledge, {
@@ -146,10 +152,10 @@ is_fast(X) :- fast(X).
                     const car = match[1];
                     if (carGifs.hasOwnProperty(car)) {
                       carGifsDiv.innerHTML = `
-                        <iframe src="${carGifs[car]}" width="300" height="300" class="car-gif" allowFullScreen></iframe>
+                        <img src="${carGifs[car]}" class="car-gif" />
                       `;
                       shownGif = true;
-                      return false; // Спиране на търсенето след първото попадение
+                      return false; // Спиране след първия резултат с гиф
                     }
                   }
                 }

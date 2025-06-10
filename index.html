@@ -1,4 +1,4 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="bg">
 <head>
   <meta charset="UTF-8" />
@@ -89,7 +89,7 @@ is_big(X).
   <div id="result"></div>
   <div class="animal-container" id="animal-animation"></div>
 
-  <script src="https://unpkg.com/tau-prolog"></script>
+  <script src="https://unpkg.com/tau-prolog@0.3.1/modules/core.js"></script>
   <script>
     const session = pl.create();
 
@@ -111,17 +111,17 @@ electric(toyota).
 is_electric(X) :- electric(X).
 is_big(X) :- big(X).
 is_fast(X) :- fast(X).
-    `;
+`;
 
     session.consult(knowledge);
 
     const carVideos = {
-      bmw: '<video class="car-video" autoplay loop muted playsinline><source src="https://cdn.pixabay.com/vimeo/500878933/Car%20Driving%20on%20Road%20-%2036759.mp4?width=640&hash=9f814e6c88a759aa3db1fbe6a488b0e0cf9757b8" type="video/mp4">Вашият браузър не поддържа видео.</video>',
-      tesla: '<video class="car-video" autoplay loop muted playsinline><source src="https://cdn.pixabay.com/vimeo/339736496/Tesla%20Model%203%20-%2072067.mp4?width=640&hash=b2ec986a94094df20b5d7c8f1b7741538f6c31b9" type="video/mp4">Вашият браузър не поддържа видео.</video>',
-      ford: '<video class="car-video" autoplay loop muted playsinline><source src="https://cdn.pixabay.com/vimeo/347235464/Ford%20Mustang%20-%2077233.mp4?width=640&hash=eea0ca6c416172b3f2e6ff49c9d9889cd0dd84af" type="video/mp4">Вашият браузър не поддържа видео.</video>',
-      audi: '<video class="car-video" autoplay loop muted playsinline><source src="https://cdn.pixabay.com/vimeo/412671758/Audi%20Driving%20-%2093751.mp4?width=640&hash=463c7e7a75d94b3813487966e26e8a988dd2c7b3" type="video/mp4">Вашият браузър не поддържа видео.</video>',
-      mercedes: '<video class="car-video" autoplay loop muted playsinline><source src="https://cdn.pixabay.com/vimeo/383455515/Mercedes-Benz%20-%2087559.mp4?width=640&hash=5d639e8f1ef9d58173350db04f3f224bd4f92c0e" type="video/mp4">Вашият браузър не поддържа видео.</video>',
-      toyota: '<video class="car-video" autoplay loop muted playsinline><source src="https://cdn.pixabay.com/vimeo/411874428/Toyota%20Car%20-%2092952.mp4?width=640&hash=ec37ad81881a67a1616d2c2695a38418e3858f55" type="video/mp4">Вашият браузър не поддържа видео.</video>'
+      bmw: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
+      tesla: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-10s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
+      ford: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-15s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
+      audi: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-20s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
+      mercedes: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-30s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
+      toyota: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-40s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>'
     };
 
     function runProlog() {
@@ -133,6 +133,7 @@ is_fast(X) :- fast(X).
       animDiv.innerHTML = "";
 
       session.query(input);
+
       const results = [];
 
       session.answers(answer => {

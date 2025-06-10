@@ -1,3 +1,130 @@
+<!DOCTYPE html> 
+<html lang="bg"> 
+<head> 
+  <meta charset="UTF-8" /> 
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Prolog коли с гифове</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      max-width: 800px;
+      margin: 30px auto;
+      background: #f4f8fb;
+      color: #333;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      text-align: center;
+    }
+    textarea {
+      width: 90%;
+      height: 120px;
+      font-family: monospace;
+      font-size: 16px;
+      margin-top: 10px;
+      border-radius: 8px;
+      border: 2px solid #007acc;
+      padding: 10px;
+      resize: vertical;
+    }
+    button {
+      margin-top: 15px;
+      padding: 10px 25px;
+      font-size: 18px;
+      background-color: #007acc;
+      border: none;
+      color: white;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #005f99;
+    }
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      min-height: 30px;
+      font-weight: bold;
+      color: #004a99;
+    }
+    .car-container {
+      margin-top: 30px;
+      min-height: 320px;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+      background: #e0f0ff;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #a0c4ff;
+    }
+    .car-gif {
+      width: 300px;
+      height: 300px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px #007acc;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>Prolog коли с гифове</h1>
+
+  <textarea id="prolog-input">
+% Примерни заявки:
+is_electric(X).
+is_fast(X).
+is_big(X).
+  </textarea><br />
+
+  <button onclick="runProlog()">Изпълни</button>
+
+  <div id="result"></div>
+  <div class="car-container" id="car-gifs"></div>
+
+  <script src="https://unpkg.com/tau-prolog@0.3.1/modules/core.js"></script>
+  <script>
+    const session = pl.create();
+
+    const knowledge = `
+car(bmw).
+car(tesla).
+car(audi).
+car(mercedes).
+car(toyota).
+
+electric(tesla).
+fast(bmw).
+fast(audi).
+big(mercedes).
+electric(toyota).
+
+is_electric(X) :- electric(X).
+is_big(X) :- big(X).
+is_fast(X) :- fast(X).
+`;
+
+    session.consult(knowledge);
+
+    const carGifs = {
+      tesla: 'https://giphy.com/embed/S7jznj1TlqH9otxZux',
+      bmw: 'https://giphy.com/embed/MotorTrend-top-gear-motortrend-america-yEWNsqrj8K7acGcCeo',
+      mercedes: 'https://giphy.com/embed/J6VkFoc92mTEA',
+      toyota: 'https://giphy.com/embed/FoVBIIrLYR5Je',
+      audi: 'https://giphy.com/embed/l46CwlES1UnwgqsaQ'
+    };
+
+    function runProlog() {
+      const input = document.getElementById("prolog-input").value.trim();
+      const resultDiv = document.getElementById("result");
+      const carGifsDiv = document.getElementById("car-gifs");
+
+      resultDiv.innerHTML = "";
+      carGifsDiv.innerHTML = "";
+
+      session.query(input);
 
       let shownGif = false;
 
@@ -18,9 +145,10 @@
             const car = match[1];
             if(carGifs.hasOwnProperty(car)){
               carGifsDiv.innerHTML = `
-                <iframe src="${carGifs[car]}" width="300" height="300" frameBorder="0" class="car-gif" allowFullScreen></iframe>
+                <iframe src="${carGifs[car]}" width="300" height="300" class="car-gif" allowFullScreen></iframe>
               `;
-              shownGif = true;  // Показахме първия гиф и спираме да добавяме още
+              shownGif = true;
+              return false; // спираме с още отговори
             }
           }
         }

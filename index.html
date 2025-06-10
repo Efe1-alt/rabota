@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prolog коли с видео</title>
+  <title>Prolog коли с различни правила и GIF</title>
   <style>
     body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      font-family: Arial, sans-serif;
       max-width: 800px;
       margin: 30px auto;
       background: #f4f8fb;
@@ -22,7 +22,6 @@
       height: 120px;
       font-family: monospace;
       font-size: 16px;
-      margin-top: 10px;
       border-radius: 8px;
       border: 2px solid #007acc;
       padding: 10px;
@@ -38,7 +37,6 @@
       color: white;
       border-radius: 8px;
       cursor: pointer;
-      transition: background-color 0.3s ease;
     }
 
     button:hover {
@@ -48,37 +46,39 @@
     #result {
       margin-top: 20px;
       font-size: 18px;
-      min-height: 30px;
       font-weight: bold;
       color: #004a99;
     }
 
-    .animal-container {
-      margin-top: 30px;
-      min-height: 200px;
+    .gif-container {
+      margin-top: 20px;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
       gap: 20px;
+      background: #d0ebff;
       padding: 20px;
-      background: #e0f0ff;
       border-radius: 12px;
-      box-shadow: 0 0 10px #a0c4ff;
     }
 
-    .car-video {
-      width: 300px;
-      max-width: 100%;
+    .gif-box {
+      background: white;
       border-radius: 12px;
-      box-shadow: 0 0 10px #007acc;
+      box-shadow: 0 0 8px #007acc;
+      padding: 10px;
+    }
+
+    .gif-box img {
+      width: 200px;
+      border-radius: 12px;
     }
   </style>
 </head>
 <body>
-  <h1>Prolog коли с видео</h1>
+  <h2>Prolog коли с различни правила и GIF</h2>
 
   <textarea id="prolog-input">
-% Примерни заявки:
+% Примери на заявки:
 is_electric(X).
 is_fast(X).
 is_big(X).
@@ -87,7 +87,7 @@ is_big(X).
   <button onclick="runProlog()">Изпълни</button>
 
   <div id="result"></div>
-  <div class="animal-container" id="animal-animation"></div>
+  <div class="gif-container" id="gif-area"></div>
 
   <script src="https://unpkg.com/tau-prolog@0.3.1/modules/core.js"></script>
   <script>
@@ -115,37 +115,30 @@ is_fast(X) :- fast(X).
 
     session.consult(knowledge);
 
-    const carVideos = {
-      bmw: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-5s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
-      tesla: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-10s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
-      ford: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-15s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
-      audi: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-20s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
-      mercedes: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-30s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
-      toyota: '<video class="car-video" autoplay loop muted playsinline><source src="https://samplelib.com/lib/preview/mp4/sample-40s.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>'
+    const carGifs = {
+      bmw: 'https://media.giphy.com/media/xT9IgIc0lryrxvqVGM/giphy.gif',
+      tesla: 'https://media.giphy.com/media/S5V0p1vvNL0zu/giphy.gif',
+      ford: 'https://media.giphy.com/media/J2k1uu8LK5E7C/giphy.gif',
+      audi: 'https://media.giphy.com/media/l0HUqsz2jdQYElRm0/giphy.gif',
+      mercedes: 'https://media.giphy.com/media/3ohhwHb3KS5l4ZzIRI/giphy.gif',
+      toyota: 'https://media.giphy.com/media/3o6Zt481isNVuQI1l6/giphy.gif'
     };
 
     function runProlog() {
       const input = document.getElementById("prolog-input").value.trim();
       const resultDiv = document.getElementById("result");
-      const animDiv = document.getElementById("animal-animation");
+      const gifDiv = document.getElementById("gif-area");
 
       resultDiv.innerHTML = "";
-      animDiv.innerHTML = "";
+      gifDiv.innerHTML = "";
 
       session.query(input);
 
-      const results = [];
+      const shown = [];
 
       session.answers(answer => {
         if (answer === false) {
-          if (results.length === 0) {
-            resultDiv.innerHTML = "<p>Няма резултати за тази заявка.</p>";
-          } else {
-            animDiv.innerHTML = results
-              .filter(car => carVideos.hasOwnProperty(car))
-              .map(car => carVideos[car])
-              .join("");
-          }
+          resultDiv.innerHTML += "<p>Няма повече резултати.</p>";
           return;
         }
 
@@ -155,8 +148,12 @@ is_fast(X) :- fast(X).
         const match = str.match(/X = (\w+)/);
         if (match) {
           const car = match[1];
-          if (carVideos.hasOwnProperty(car)) {
-            results.push(car); 
+          if (carGifs[car]) {
+            shown.push(car);
+            gifDiv.innerHTML += `
+              <div class="gif-box">
+                <img src="${carGifs[car]}" alt="${car}">
+              </div>`;
           }
         }
       });

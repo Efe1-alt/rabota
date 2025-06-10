@@ -3,30 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Prolog коли с различни правила и ВИДЕО</title>
+  <title>Prolog коли с видео</title>
   <style>
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      max-width: 700px;
+      max-width: 800px;
       margin: 30px auto;
-      background: #f9f9f9;
+      background: #f4f8fb;
       color: #333;
       padding: 20px;
+      border-radius: 12px;
       box-shadow: 0 0 15px rgba(0,0,0,0.1);
-      border-radius: 10px;
       text-align: center;
     }
 
     textarea {
       width: 90%;
-      max-width: 600px;
       height: 120px;
       font-family: monospace;
       font-size: 16px;
       margin-top: 10px;
-      border-radius: 6px;
+      border-radius: 8px;
       border: 2px solid #007acc;
-      padding: 8px;
+      padding: 10px;
       resize: vertical;
     }
 
@@ -56,32 +55,33 @@
 
     .animal-container {
       margin-top: 30px;
-      min-height: 160px;
+      min-height: 200px;
       display: flex;
+      flex-wrap: wrap;
       justify-content: center;
-      align-items: center;
-      background: #d0e8ff;
+      gap: 20px;
+      padding: 20px;
+      background: #e0f0ff;
       border-radius: 12px;
       box-shadow: 0 0 10px #a0c4ff;
-      padding: 10px;
     }
 
     .car-video {
+      width: 300px;
       max-width: 100%;
-      max-height: 300px;
       border-radius: 12px;
-      box-shadow: 0 0 10px #005f99;
+      box-shadow: 0 0 10px #007acc;
     }
   </style>
 </head>
 <body>
-  <h1>Prolog коли с различни правила и ВИДЕО</h1>
+  <h1>Prolog коли с видео</h1>
 
   <textarea id="prolog-input">
-% Примери на заявки:
+% Примерни заявки:
 is_electric(X).
-is_big(X).
 is_fast(X).
+is_big(X).
   </textarea><br />
 
   <button onclick="runProlog()">Изпълни</button>
@@ -97,10 +97,16 @@ is_fast(X).
 car(bmw).
 car(tesla).
 car(ford).
+car(audi).
+car(mercedes).
+car(toyota).
 
 electric(tesla).
 big(ford).
 fast(bmw).
+fast(audi).
+big(mercedes).
+electric(toyota).
 
 is_electric(X) :- electric(X).
 is_big(X) :- big(X).
@@ -109,14 +115,17 @@ is_fast(X) :- fast(X).
 
     session.consult(knowledge);
 
-    const carAnimations = {
-      bmw: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />Вашият браузър не поддържа видео.</video>',
-      tesla: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4" />Вашият браузър не поддържа видео.</video>',
-      ford: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4" />Вашият браузър не поддържа видео.</video>'
+    const carVideos = {
+      bmw: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
+      tesla: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
+      ford: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
+      audi: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
+      mercedes: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>',
+      toyota: '<video class="car-video" autoplay loop muted><source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">Вашият браузър не поддържа видео.</video>'
     };
 
     function runProlog() {
-      const input = document.getElementById("prolog-input").value;
+      const input = document.getElementById("prolog-input").value.trim();
       const resultDiv = document.getElementById("result");
       const animDiv = document.getElementById("animal-animation");
 
@@ -124,28 +133,27 @@ is_fast(X) :- fast(X).
       animDiv.innerHTML = "";
 
       session.query(input);
+      const results = [];
+
       session.answers(answer => {
         if (answer === false) {
-          resultDiv.innerHTML += `<p>Няма повече резултати.</p>`;
+          if (results.length === 0) {
+            resultDiv.innerHTML = "<p>Няма резултати за тази заявка.</p>";
+          } else {
+            // Показване на видеата за всички коли
+            animDiv.innerHTML = results.map(car =>
+              carVideos[car] || `<p>Няма видео за ${car}.</p>`
+            ).join("");
+          }
           return;
         }
 
         const str = pl.format_answer(answer);
-        if (str === "false.") {
-          resultDiv.innerHTML = "<p>Няма резултати за тази заявка.</p>";
-          return;
-        }
-
         resultDiv.innerHTML += `<p>${str}</p>`;
 
         const match = str.match(/X = (\w+)/);
         if (match) {
-          const car = match[1];
-          if (carAnimations[car]) {
-            animDiv.innerHTML = carAnimations[car];
-          } else {
-            animDiv.innerHTML = "<p>Няма видео за този автомобил.</p>";
-          }
+          results.push(match[1]);
         }
       });
     }

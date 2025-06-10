@@ -83,16 +83,15 @@ is_big(X).
   <script>
     const session = pl.create();
 
+    // Знания само за моделите с линкове
     const knowledge = `
 car(bmw).
 car(tesla).
-car(ford).
 car(audi).
 car(mercedes).
 car(toyota).
 
 electric(tesla).
-big(ford).
 fast(bmw).
 fast(audi).
 big(mercedes).
@@ -105,7 +104,7 @@ is_fast(X) :- fast(X).
 
     session.consult(knowledge);
 
-    // Линкове към Giphy вградени iframe с кода за всеки модел
+    // GIF embed линкове за избраните модели
     const carGifs = {
       tesla: '<iframe class="giphy-embed" src="https://giphy.com/embed/S7jznj1TlqH9otxZux" width="320" height="180" frameBorder="0" allowFullScreen></iframe>',
       bmw: '<iframe class="giphy-embed" src="https://giphy.com/embed/yEWNsqrj8K7acGcCeo" width="320" height="180" frameBorder="0" allowFullScreen></iframe>',
@@ -114,7 +113,7 @@ is_fast(X) :- fast(X).
       audi: '<iframe class="giphy-embed" src="https://giphy.com/embed/l46CwlES1UnwgqsaQ" width="320" height="180" frameBorder="0" allowFullScreen></iframe>'
     };
 
-    async function runProlog() {
+    function runProlog() {
       const input = document.getElementById("prolog-input").value.trim();
       const resultDiv = document.getElementById("result");
       const gifDiv = document.getElementById("gif-container");
